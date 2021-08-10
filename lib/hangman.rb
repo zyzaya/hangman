@@ -1,4 +1,6 @@
 class Hangman
+  attr_reader :word
+
   def initialize(word)
     @word = word
     @guesses = []
@@ -25,6 +27,7 @@ class Hangman
       @guesses.push(g)
       @incorrect += 1 unless @word.chars.include?(g)
     end
+    p @guesses
   end 
 
   def correct
@@ -39,5 +42,13 @@ class Hangman
 
   def guessed
     @guesses.join
+  end
+
+  def win?
+    @word.chars.all? { |c| @guesses.include?(c) }
+  end
+
+  def loss?
+    @incorrect >= @icon_indices.length
   end
 end

@@ -7,6 +7,12 @@ class HangmanGame
   INTRO_MESSAGE = 'New game? (new). Or load a saved game? (load)'
   NEW_GAME = %w[new n]
   LOAD_GAME = %w[load l]
+  GUESS_MESSAGE = 'Enter guess.'
+  INVALID_GUESS = 'Invalid input. Guess must be 1 character that has not already been guessed'
+  WIN_MESSAGE = 'You win! '
+  LOSE_MESSAGE = 'You lose. The correct word was '
+  AGAIN = 'Play again?'
+  INVALID_AGAIN = 'Invalid input. ' + INTRO_MESSAGE
 
   def initialize
     @library = WordLibrary.new
@@ -29,8 +35,9 @@ class HangmanGame
   private
 
   def new_game
-    @hangman = Hangman.new(@library.random)
+    @hangman = Hangman.new('hangman')
     p 'newing'
+    play_game
   end
 
   def load_game
@@ -38,7 +45,29 @@ class HangmanGame
   end
 
   def play_game
-    
+    until @hangman.loss? || @hangman.win?
+      g = @input.get(GUESS_MESSAGE, INVALID_GUESS) do |i|
+        i.match?(/[A-Za-z]/) && !@hangman.guessed.chars.include?(i)
+      end
+      p g
+      @hangman.guess(g)
+      puts @hangman.hanged_man
+      puts @hangman.guessed
+      puts @hangman.correct
+    end
+    finish_game
+  end
+
+  def finish_game
+    message =
+      if @hangman.win?
+        WIN_MESSAGE
+      elsif @hangman.loss?
+        LOSE_MESSAGE + "'#{@hangman.word}'. "
+      end
+    message += AGAIN
+    puts message
+    start
   end
 end
 
