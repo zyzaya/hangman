@@ -4,11 +4,13 @@ require_relative 'input'
 require 'yaml'
 
 class HangmanGame
-  EXIT_CODE = %w[exit e]
+  YES = %w[yes y]
+  NO = %w[no n]
+  EXIT_CODE = %w[exit ex]
   INTRO_MESSAGE = 'New game? (new). Or load a saved game? (load)'
   NEW_GAME = %w[new n]
   LOAD_GAME = %w[load l]
-  SAVE_GAME = %w[save s]
+  SAVE_GAME = %w[save sa]
   GUESS_MESSAGE = 'Enter guess.'
   INVALID_GUESS = 'Invalid input. Guess must be 1 character that has not already been guessed'
   WIN_MESSAGE = 'You win! '
@@ -19,6 +21,9 @@ class HangmanGame
   INVALID_SAVE = 'Invalid input ' + SAVE_MESSAGE
   LOAD_MESSAGE = 'Select save.'
   INVALID_LOAD = 'Invalid input. ' + LOAD_MESSAGE
+  QUIT_MESSAGE = 'Quit game? (yes/no)'
+  INVALID_QUIT = 'Invalid input. Enter \'yes\' or \'no\'.'
+
   def initialize
     @library = WordLibrary.new
     @input = Input.new(EXIT_CODE)
@@ -59,7 +64,7 @@ class HangmanGame
 
   def play_game
     user_input = ""
-    until @hangman.loss? || @hangman.win? || EXIT_CODE.include?(user_input)
+    until @hangman.loss? || @hangman.win?
       puts @hangman.hanged_man
       puts @hangman.guessed
       puts @hangman.correct
@@ -70,7 +75,10 @@ class HangmanGame
 
       if SAVE_GAME.include?(user_input)
         save_game
-        puts 'game saved'
+        puts 'Game saved'
+        user_input = @input.get(QUIT_MESSAGE, INVALID_QUIT, YES + NO)
+        return if (EXIT_CODE + YES).include?(user_input)
+
       else
         @hangman.guess(user_input)
       end
