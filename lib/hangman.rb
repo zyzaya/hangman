@@ -3,10 +3,10 @@ class Hangman
     @word = word
     @guesses = []
     @icon_indices = [18, 24, 25, 26, 32, 34]
+    @incorrect = 0
   end
 
-  def hanged_man(n)
-    n = @icon_indices.length - 1 if n > @icon_indices.length - 1
+  def hanged_man
     image = <<~MAN
         ___
        |   |
@@ -15,13 +15,16 @@ class Hangman
        |  / \\
       _|_
     MAN
-    (@icon_indices.length - 1).downto(n) { |i| image[@icon_indices[i]] = ' '}
+    (@icon_indices.length - 1).downto(@incorrect) { |i| image[@icon_indices[i]] = ' '}
     image
   end
 
   def guess(g)
     g = g.to_s
-    @guesses.push(g) if g && g.length == 1
+    if g && g.length == 1
+      @guesses.push(g)
+      @incorrect += 1 unless @word.chars.include?(g)
+    end
   end 
 
   def correct
