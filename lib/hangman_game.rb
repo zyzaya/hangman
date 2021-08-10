@@ -11,7 +11,7 @@ class HangmanGame
   NEW_GAME = %w[new n]
   LOAD_GAME = %w[load l]
   SAVE_GAME = %w[save sa]
-  GUESS_MESSAGE = 'Enter guess.'
+  GUESS_MESSAGE = 'Enter guess. Or \'save\' to save game.'
   INVALID_GUESS = 'Invalid input. Guess must be 1 character that has not already been guessed'
   WIN_MESSAGE = 'You win! '
   LOSE_MESSAGE = 'You lose. The correct word was '
@@ -45,7 +45,7 @@ class HangmanGame
   private
 
   def new_game
-    @hangman = Hangman.new('hangman')
+    @hangman = Hangman.new(@library.random)
     @save_name = ""
     play_game
   end
@@ -83,7 +83,7 @@ class HangmanGame
         @hangman.guess(user_input)
       end
     end
-    finish_game unless !Exi
+    finish_game
   end
 
   def finish_game
