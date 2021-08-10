@@ -27,7 +27,6 @@ class Hangman
       @guesses.push(g)
       @incorrect += 1 unless @word.chars.include?(g)
     end
-    p @guesses
   end 
 
   def correct
