@@ -3,24 +3,38 @@ require_relative 'word_library'
 require_relative 'input'
 
 class HangmanGame
+  EXIT_CODE = %w[exit e]
+  INTRO_MESSAGE = 'New game? (new). Or load a saved game? (load)'
+  NEW_GAME = %w[new n]
+  LOAD_GAME = %w[load l]
+
   def initialize
     @library = WordLibrary.new
+    @input = Input.new(EXIT_CODE)
   end
 
   def start
-    # new/load gameinput
-    # play_game
+    user_input = @input.get(
+      INTRO_MESSAGE,
+      'Invalid input. ' + INTRO_MESSAGE,
+      NEW_GAME + LOAD_GAME
+    )
+    if NEW_GAME.include?(user_input)
+      new_game
+    elsif LOAD_GAME.include?(user_input)
+      load_game
+    end
   end
 
   private
 
   def new_game
     @hangman = Hangman.new(@library.random)
-    play_game
+    p 'newing'
   end
 
   def load_game
-  
+    p 'loading'
   end
 
   def play_game
@@ -28,10 +42,13 @@ class HangmanGame
   end
 end
 
-exit_code = %w[exit e]
-test_input = %w[new n load l]
-input = Input.new(exit_code)
-input.get('enter stuff', 'not that') { |i| i == 'new'}
+hangman = HangmanGame.new
+hangman.start
+
+# exit_code = %w[exit e]
+# test_input = %w[new n load l]
+# input = Input.new(exit_code)
+# input.get('enter stuff', 'not that') { |i| i == 'new'}
 
 # test_g = %w[h n g t l z o]
 # hangman = Hangman.new('hangman')
@@ -42,9 +59,9 @@ input.get('enter stuff', 'not that') { |i| i == 'new'}
 # puts hangman.correct
 # p image
 
-library = WordLibrary.new
-0.upto(12) { p library.random }
-p library.random
+# library = WordLibrary.new
+# 0.upto(12) { p library.random }
+# p library.random
 
 #   ___
 #  |   |

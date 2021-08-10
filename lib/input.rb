@@ -15,7 +15,7 @@ class Input
       valid = 
         @exit_code.include?(input) ||
         (block.call(input) unless block.nil?) ||
-        (valid.input.include?(input) unless valid_input.nil?)
+        (valid_input.include?(input) unless valid_input.nil?)
       puts retry_text unless valid
     end
     input
